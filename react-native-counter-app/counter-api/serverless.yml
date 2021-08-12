@@ -1,0 +1,35 @@
+org: sandaemc
+app: counter-api
+service: counter-api
+
+frameworkVersion: '2'
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: '20201221'
+  environment:
+    DATABASE_URL: "postgres://postgres:password@endpoint/counterdb"
+  vpc:
+    securityGroupIds:
+      - sg-123
+    subnetIds:
+      - subnet-123
+
+functions:
+  get:
+    handler: handler.get
+    events:
+      - http:
+          path: /{userId}/count
+          method: get
+  patch:
+    handler: handler.patch
+    events:
+      - http:
+          path: /{userId}/count
+          method: PATCH
